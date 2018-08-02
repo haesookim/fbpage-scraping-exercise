@@ -11,23 +11,25 @@ import urllib.request
 app_id = ""
 app_secret = ""
 
-access_token = app_id + "|" + app_secret
+access_token = " "
 
 #alter as needed to find out which page to identify
 #numeric id of bamboo grove page = 560898400668463
+#page_id = "SNUBamboo"
 page_id = "SNUBamboo"
 
 #YYYY_MM_DD
-since = ""
-until = ""
+since_date = "2000-01-01"
+until_date = "2018-08-01"
+
 
 def request_until_succeed(url):
     req = urllib.request.Request(url)
     success = False;
     while success is False:
         try:
-            response = urllib.reuest.urlopen(req)
-            if response.getcode() = 200:
+            response = urllib.request.urlopen(req)
+            if response.getcode() == 200:
                 success = True
         except Exception as e:
             print(e)
@@ -36,12 +38,15 @@ def request_until_succeed(url):
             #optionally print error
     return response.read()
 
+
 #check if works for korean
 def unicode_decode(text):
+
     try:
         return text.encode('utf-8').decode()
     except UnicodeDecodeError:
         return text.encode('utf-8')
+
 
 def getFacebookPageFeedUrl(base_url):
     fields = "&fields=message,link,created_time,type,name,id," + \
@@ -49,6 +54,7 @@ def getFacebookPageFeedUrl(base_url):
         ".limit(0).summary(true)"
 
     return base_url + fields
+
 
 def getReactionsForStatuses(base_url):
 
@@ -77,6 +83,7 @@ def getReactionsForStatuses(base_url):
 
     return reactions_dict
 
+
 def processFacebookPageFeedStatus(status):
     status_id = status['id']
     status_type = status['type']
@@ -87,13 +94,14 @@ def processFacebookPageFeedStatus(status):
 
     status_published = datetime.datetime.strptime(status['created_time'], '%Y-%m-%dT%H:%M:%S+0000')
     status_published = status_published + datetime.timedelta(hours=+9) #is this KST??? need to check
-    status_published = status_published.strftime('%Y-%m-%d %H:%M:%S)
+    status_published = status_published.strftime('%Y-%m-%d %H:%M:%S')
 
     num_reactions = 0 if 'reactions' not in status else status['reactions']['summary']['total_count']
     num_comments = 0 if 'comments' not in status else status['comments']['summary']['total_count']
     num_shares = 0 if 'num_shares' not in status else status['shares']['count']
 
     return (status_id, status_message, link_name, status_type, status_link, status_published, num_reactions, num_comments, num_shares)
+
 
 def scrapeFacebookPageFeedStatus(page_id, access_token, since_date, until_date):
     with open('{}_facebook_statuses.csv'.format(page_id), 'w') as file:
