@@ -33,8 +33,16 @@ num = 0
 # the 4th div is the one that needs iteration
 def scrape_for_posts(adder):
     try:
-        loaded = EC.text_to_be_present_in_element((By.XPATH, "//*[@id='mainContainer']/div/div[5]/div[5]"), "년")
-        WebDriverWait(browser, timeout).until(loaded)
+        loaded1 = EC.text_to_be_present_in_element((By.XPATH, "//*[@id='mainContainer']/div/div[5]/div[1]"), "년")
+        loaded2 = EC.text_to_be_present_in_element((By.XPATH, "//*[@id='mainContainer']/div/div[5]/div[2]"), "년")
+        loaded3 = EC.text_to_be_present_in_element((By.XPATH, "//*[@id='mainContainer']/div/div[5]/div[3]"), "년")
+        loaded4 = EC.text_to_be_present_in_element((By.XPATH, "//*[@id='mainContainer']/div/div[5]/div[4]"), "년")
+        loaded5 = EC.text_to_be_present_in_element((By.XPATH, "//*[@id='mainContainer']/div/div[5]/div[5]"), "년")
+        WebDriverWait(browser, timeout).until(loaded1)
+        WebDriverWait(browser, timeout).until(loaded2)
+        WebDriverWait(browser, timeout).until(loaded3)
+        WebDriverWait(browser, timeout).until(loaded4)
+        WebDriverWait(browser, timeout).until(loaded5)
     except TimeoutException:
         print("Timed out")
 
@@ -94,7 +102,9 @@ def check_exists_by_xpath(xpath):
     return True
 
 
-while check_exists_by_xpath("//*[@id='mainContainer']/div/div[5]/center/ul/li[7]/a"):
+count = 100
+# check_exists_by_xpath("//*[@id='mainContainer']/div/div[5]/center/ul/li[7]/a")
+while count > 0:
 
     # button settings for future pages
     num = scrape_for_posts(num)
@@ -117,10 +127,13 @@ while check_exists_by_xpath("//*[@id='mainContainer']/div/div[5]/center/ul/li[7]
     next_page_button = browser.find_element_by_xpath("//*[@id='mainContainer']/div/div[5]/center/ul/li[7]/a")
     next_page_button.click()
 
+    count = count - 1
+    print(count)
+
 
 # create csv from list
 def write_csv(post_list, num):
-    with open('posts data.csv', 'wt', encoding='utf-8') as file:
+    with open('posts_data_100.csv', 'wt', encoding='utf-8') as file:
         w = csv.writer(file)
         w.writerow(['post_text'])
         for i in range(num):
