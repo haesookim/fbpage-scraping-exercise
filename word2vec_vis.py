@@ -26,7 +26,7 @@ def clean_posts(post):
     return rl
 
 
-with open(data_path, 'w') as f:
+with open(data_path) as f:
     data = csv.reader(f, delimiter=',')
     for row in data:
         results.append(clean_posts(row))
@@ -35,7 +35,7 @@ with open(data_path, 'w') as f:
 with open(parsed_path, 'w', encoding='utf-8') as fp:
     fp.write("\n".join(results))
 
-data = word2vec.LineSentence(parsed_path)
+"""data = word2vec.LineSentence(parsed_path)
 model = word2vec.Word2Vec(data, size=100, window=10, hs=1, min_count=2, sg=1)
 model.save(word2vec_path)
 print("model made")
@@ -56,4 +56,4 @@ with open(tsne_path, 'wb') as f:
     pickle.dump(tsne_points, f)
 
 tsne_df = pd.DataFrame(tsne_points, index=word_embeddings.index, columns=['x_coord', 'y_coord'])
-tsne_df['word'] = tsne_df.index
+tsne_df['word'] = tsne_df.index"""

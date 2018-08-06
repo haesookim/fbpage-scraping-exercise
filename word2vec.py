@@ -21,12 +21,12 @@ with open('posts_data_50.csv') as csv_file:
             rl = (" ".join(r)).strip()
             results.append(rl)
 
-bamboo_file = "bamboo.wakati"
+bamboo_file = "bamboo_1.wakati"
 
 with open(bamboo_file, 'w', encoding='utf-8') as fp:
     fp.write("\n".join(results))
 
 data = word2vec.LineSentence(bamboo_file)
 model = word2vec.Word2Vec(data, size=200, window=10, hs=1, min_count=2, sg=1)
-model.save("Bambooword2vec.model")
+model.save("Bambooword2vec_1.model")
 print("done")
